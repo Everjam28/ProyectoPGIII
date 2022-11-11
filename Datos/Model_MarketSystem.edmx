@@ -1,0 +1,733 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="dbSystem_MarketModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ciudades">
+          <Key>
+            <PropertyRef Name="IdCiudades" />
+          </Key>
+          <Property Name="IdCiudades" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Clientes">
+          <Key>
+            <PropertyRef Name="idClientes" />
+          </Key>
+          <Property Name="idClientes" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ccoruc" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="razonsocial" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="direccion" Type="varchar" MaxLength="250" />
+          <Property Name="telefono" Type="varchar" MaxLength="50" />
+          <Property Name="correo" Type="varchar" MaxLength="40" />
+          <Property Name="idProfesional" Type="int" />
+          <Property Name="IdCiudades" Type="int" />
+        </EntityType>
+        <EntityType Name="DetalleVenta">
+          <Key>
+            <PropertyRef Name="idDetalleventa" />
+          </Key>
+          <Property Name="cantidad" Type="int" />
+          <Property Name="descripcion" Type="nvarchar" MaxLength="260" />
+          <Property Name="precio" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="gravadas" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="totales" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="idventas" Type="int" />
+          <Property Name="idDetalleventa" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Profesionales">
+          <Key>
+            <PropertyRef Name="idProfesional" />
+          </Key>
+          <Property Name="idProfesional" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ccProfesional" Type="varchar" MaxLength="15" />
+          <Property Name="nombres" Type="varchar" MaxLength="30" />
+          <Property Name="apellidos" Type="varchar" MaxLength="70" />
+          <Property Name="direccion" Type="varchar" MaxLength="250" />
+          <Property Name="telefono" Type="varchar" MaxLength="50" />
+          <Property Name="correo" Type="varchar" MaxLength="30" />
+          <Property Name="idciudades" Type="int" />
+        </EntityType>
+        <EntityType Name="Usuarios">
+          <Key>
+            <PropertyRef Name="idUsuarios" />
+          </Key>
+          <Property Name="idUsuarios" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="usuario" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="contraseña" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="acceso" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="idProfesionales" Type="int" />
+        </EntityType>
+        <EntityType Name="Ventas">
+          <Key>
+            <PropertyRef Name="idVentas" />
+          </Key>
+          <Property Name="idVentas" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="numeroVentas" Type="nvarchar" MaxLength="15" />
+          <Property Name="fecha" Type="date" />
+          <Property Name="estado" Type="nvarchar" MaxLength="15" />
+          <Property Name="idClientes" Type="int" />
+        </EntityType>
+        <Association Name="fk_idCiudad">
+          <End Role="ciudades" Type="Self.ciudades" Multiplicity="0..1" />
+          <End Role="Clientes" Type="Self.Clientes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ciudades">
+              <PropertyRef Name="IdCiudades" />
+            </Principal>
+            <Dependent Role="Clientes">
+              <PropertyRef Name="IdCiudades" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_idciudades">
+          <End Role="ciudades" Type="Self.ciudades" Multiplicity="0..1" />
+          <End Role="Profesionales" Type="Self.Profesionales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ciudades">
+              <PropertyRef Name="IdCiudades" />
+            </Principal>
+            <Dependent Role="Profesionales">
+              <PropertyRef Name="idciudades" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_idcliente">
+          <End Role="Clientes" Type="Self.Clientes" Multiplicity="0..1" />
+          <End Role="Ventas" Type="Self.Ventas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clientes">
+              <PropertyRef Name="idClientes" />
+            </Principal>
+            <Dependent Role="Ventas">
+              <PropertyRef Name="idClientes" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_idProfesioanles2">
+          <End Role="Profesionales" Type="Self.Profesionales" Multiplicity="0..1" />
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Profesionales">
+              <PropertyRef Name="idProfesional" />
+            </Principal>
+            <Dependent Role="Usuarios">
+              <PropertyRef Name="idProfesionales" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_idProfesional">
+          <End Role="Profesionales" Type="Self.Profesionales" Multiplicity="0..1" />
+          <End Role="Clientes" Type="Self.Clientes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Profesionales">
+              <PropertyRef Name="idProfesional" />
+            </Principal>
+            <Dependent Role="Clientes">
+              <PropertyRef Name="idProfesional" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_idventas">
+          <End Role="Ventas" Type="Self.Ventas" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="DetalleVenta" Type="Self.DetalleVenta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ventas">
+              <PropertyRef Name="idVentas" />
+            </Principal>
+            <Dependent Role="DetalleVenta">
+              <PropertyRef Name="idventas" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="s_Anular_Ventas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idVentas" Type="int" Mode="In" />
+        </Function>
+        <Function Name="s_buscar_profesionales" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="textobuscar" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="s_buscar_registro" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="texobuscar" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="s_Buscar_Ventas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fechaInicial" Type="varchar" Mode="In" />
+          <Parameter Name="fechafinal" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="s_DetalleVentas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="cantidad" Type="int" Mode="In" />
+          <Parameter Name="descripcion" Type="varchar" Mode="In" />
+          <Parameter Name="precio" Type="decimal" Mode="In" />
+          <Parameter Name="gravadas" Type="decimal" Mode="In" />
+          <Parameter Name="totales" Type="decimal" Mode="In" />
+          <Parameter Name="idVentas" Type="int" Mode="In" />
+        </Function>
+        <Function Name="s_editar_Clientes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idClientes" Type="int" Mode="In" />
+          <Parameter Name="ccoruc" Type="varchar" Mode="In" />
+          <Parameter Name="razonsocial" Type="varchar" Mode="In" />
+          <Parameter Name="direccion" Type="varchar" Mode="In" />
+          <Parameter Name="telefono" Type="varchar" Mode="In" />
+          <Parameter Name="correo" Type="varchar" Mode="In" />
+          <Parameter Name="idProfesionales" Type="int" Mode="In" />
+          <Parameter Name="idCiudades" Type="int" Mode="In" />
+        </Function>
+        <Function Name="s_editar_profesioanles" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idprofesional" Type="int" Mode="In" />
+          <Parameter Name="ccprofesional" Type="varchar" Mode="In" />
+          <Parameter Name="nombres" Type="varchar" Mode="In" />
+          <Parameter Name="apellidos" Type="varchar" Mode="In" />
+          <Parameter Name="direccion" Type="varchar" Mode="In" />
+          <Parameter Name="telefono" Type="varchar" Mode="In" />
+          <Parameter Name="correo" Type="varchar" Mode="In" />
+          <Parameter Name="idciudades" Type="int" Mode="In" />
+        </Function>
+        <Function Name="s_editar_Usuarios" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idUsuarios" Type="int" Mode="In" />
+          <Parameter Name="usuario" Type="varchar" Mode="In" />
+          <Parameter Name="contraseña" Type="varchar" Mode="In" />
+          <Parameter Name="acceso" Type="varchar" Mode="In" />
+          <Parameter Name="idProfesionales" Type="int" Mode="In" />
+        </Function>
+        <Function Name="s_eliminar_profesionales" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idprofesional" Type="int" Mode="In" />
+        </Function>
+        <Function Name="s_eliminar_Usuarios" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idUsuarios" Type="int" Mode="In" />
+        </Function>
+        <Function Name="s_elimnar_Clientes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idClientes" Type="int" Mode="In" />
+        </Function>
+        <Function Name="s_Generar_Comprobantes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idVentas" Type="int" Mode="In" />
+        </Function>
+        <Function Name="s_Insertar_Ventas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idVentas" Type="int" Mode="InOut" />
+          <Parameter Name="numeroVentas" Type="nvarchar" Mode="In" />
+          <Parameter Name="fecha" Type="date" Mode="In" />
+          <Parameter Name="estado" Type="nvarchar" Mode="In" />
+          <Parameter Name="idClientes" Type="int" Mode="In" />
+        </Function>
+        <Function Name="s_Mostrar_Ventas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="dbSystem_MarketModelStoreContainer">
+          <EntitySet Name="ciudades" EntityType="Self.ciudades" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Clientes" EntityType="Self.Clientes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DetalleVenta" EntityType="Self.DetalleVenta" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Profesionales" EntityType="Self.Profesionales" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuarios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ventas" EntityType="Self.Ventas" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="fk_idCiudad" Association="Self.fk_idCiudad">
+            <End Role="ciudades" EntitySet="ciudades" />
+            <End Role="Clientes" EntitySet="Clientes" />
+          </AssociationSet>
+          <AssociationSet Name="fk_idciudades" Association="Self.fk_idciudades">
+            <End Role="ciudades" EntitySet="ciudades" />
+            <End Role="Profesionales" EntitySet="Profesionales" />
+          </AssociationSet>
+          <AssociationSet Name="fk_idcliente" Association="Self.fk_idcliente">
+            <End Role="Clientes" EntitySet="Clientes" />
+            <End Role="Ventas" EntitySet="Ventas" />
+          </AssociationSet>
+          <AssociationSet Name="fk_idProfesioanles2" Association="Self.fk_idProfesioanles2">
+            <End Role="Profesionales" EntitySet="Profesionales" />
+            <End Role="Usuarios" EntitySet="Usuarios" />
+          </AssociationSet>
+          <AssociationSet Name="fk_idProfesional" Association="Self.fk_idProfesional">
+            <End Role="Profesionales" EntitySet="Profesionales" />
+            <End Role="Clientes" EntitySet="Clientes" />
+          </AssociationSet>
+          <AssociationSet Name="fk_idventas" Association="Self.fk_idventas">
+            <End Role="Ventas" EntitySet="Ventas" />
+            <End Role="DetalleVenta" EntitySet="DetalleVenta" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="dbSystem_MarketModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ciudades">
+          <Key>
+            <PropertyRef Name="IdCiudades" />
+          </Key>
+          <Property Name="IdCiudades" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Clientes" Relationship="Self.fk_idCiudad" FromRole="ciudades" ToRole="Clientes" />
+          <NavigationProperty Name="Profesionales" Relationship="Self.fk_idciudades" FromRole="ciudades" ToRole="Profesionales" />
+        </EntityType>
+        <EntityType Name="Clientes">
+          <Key>
+            <PropertyRef Name="idClientes" />
+          </Key>
+          <Property Name="idClientes" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ccoruc" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="razonsocial" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="direccion" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="correo" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="idProfesional" Type="Int32" />
+          <Property Name="IdCiudades" Type="Int32" />
+          <NavigationProperty Name="ciudades" Relationship="Self.fk_idCiudad" FromRole="Clientes" ToRole="ciudades" />
+          <NavigationProperty Name="Ventas" Relationship="Self.fk_idcliente" FromRole="Clientes" ToRole="Ventas" />
+          <NavigationProperty Name="Profesionales" Relationship="Self.fk_idProfesional" FromRole="Clientes" ToRole="Profesionales" />
+        </EntityType>
+        <EntityType Name="Profesionales">
+          <Key>
+            <PropertyRef Name="idProfesional" />
+          </Key>
+          <Property Name="idProfesional" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ccProfesional" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="nombres" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="apellidos" Type="String" MaxLength="70" FixedLength="false" Unicode="false" />
+          <Property Name="direccion" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="correo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="idciudades" Type="Int32" />
+          <NavigationProperty Name="ciudades" Relationship="Self.fk_idciudades" FromRole="Profesionales" ToRole="ciudades" />
+          <NavigationProperty Name="Clientes" Relationship="Self.fk_idProfesional" FromRole="Profesionales" ToRole="Clientes" />
+          <NavigationProperty Name="Usuarios" Relationship="Self.fk_idProfesioanles2" FromRole="Profesionales" ToRole="Usuarios" />
+        </EntityType>
+        <EntityType Name="Usuarios">
+          <Key>
+            <PropertyRef Name="idUsuarios" />
+          </Key>
+          <Property Name="idUsuarios" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="usuario" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="contraseña" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="acceso" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="idProfesionales" Type="Int32" />
+          <NavigationProperty Name="Profesionales" Relationship="Self.fk_idProfesioanles2" FromRole="Usuarios" ToRole="Profesionales" />
+        </EntityType>
+        <EntityType Name="Ventas">
+          <Key>
+            <PropertyRef Name="idVentas" />
+          </Key>
+          <Property Name="idVentas" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="numeroVentas" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="fecha" Type="DateTime" Precision="0" />
+          <Property Name="estado" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="idClientes" Type="Int32" />
+          <NavigationProperty Name="Clientes" Relationship="Self.fk_idcliente" FromRole="Ventas" ToRole="Clientes" />
+          <NavigationProperty Name="DetalleVenta" Relationship="dbSystem_MarketModel.fk_idventas" FromRole="Ventas" ToRole="DetalleVenta" />
+        </EntityType>
+        <Association Name="fk_idCiudad">
+          <End Role="ciudades" Type="Self.ciudades" Multiplicity="0..1" />
+          <End Role="Clientes" Type="Self.Clientes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ciudades">
+              <PropertyRef Name="IdCiudades" />
+            </Principal>
+            <Dependent Role="Clientes">
+              <PropertyRef Name="IdCiudades" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_idciudades">
+          <End Role="ciudades" Type="Self.ciudades" Multiplicity="0..1" />
+          <End Role="Profesionales" Type="Self.Profesionales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ciudades">
+              <PropertyRef Name="IdCiudades" />
+            </Principal>
+            <Dependent Role="Profesionales">
+              <PropertyRef Name="idciudades" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_idcliente">
+          <End Role="Clientes" Type="Self.Clientes" Multiplicity="0..1" />
+          <End Role="Ventas" Type="Self.Ventas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clientes">
+              <PropertyRef Name="idClientes" />
+            </Principal>
+            <Dependent Role="Ventas">
+              <PropertyRef Name="idClientes" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_idProfesional">
+          <End Role="Profesionales" Type="Self.Profesionales" Multiplicity="0..1" />
+          <End Role="Clientes" Type="Self.Clientes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Profesionales">
+              <PropertyRef Name="idProfesional" />
+            </Principal>
+            <Dependent Role="Clientes">
+              <PropertyRef Name="idProfesional" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_idProfesioanles2">
+          <End Role="Profesionales" Type="Self.Profesionales" Multiplicity="0..1" />
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Profesionales">
+              <PropertyRef Name="idProfesional" />
+            </Principal>
+            <Dependent Role="Usuarios">
+              <PropertyRef Name="idProfesionales" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="dbSystem_MarketEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ciudades" EntityType="Self.ciudades" />
+          <EntitySet Name="Clientes" EntityType="Self.Clientes" />
+          <EntitySet Name="Profesionales" EntityType="Self.Profesionales" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuarios" />
+          <EntitySet Name="Ventas" EntityType="Self.Ventas" />
+          <AssociationSet Name="fk_idCiudad" Association="Self.fk_idCiudad">
+            <End Role="ciudades" EntitySet="ciudades" />
+            <End Role="Clientes" EntitySet="Clientes" />
+          </AssociationSet>
+          <AssociationSet Name="fk_idciudades" Association="Self.fk_idciudades">
+            <End Role="ciudades" EntitySet="ciudades" />
+            <End Role="Profesionales" EntitySet="Profesionales" />
+          </AssociationSet>
+          <AssociationSet Name="fk_idcliente" Association="Self.fk_idcliente">
+            <End Role="Clientes" EntitySet="Clientes" />
+            <End Role="Ventas" EntitySet="Ventas" />
+          </AssociationSet>
+          <AssociationSet Name="fk_idProfesional" Association="Self.fk_idProfesional">
+            <End Role="Profesionales" EntitySet="Profesionales" />
+            <End Role="Clientes" EntitySet="Clientes" />
+          </AssociationSet>
+          <AssociationSet Name="fk_idProfesioanles2" Association="Self.fk_idProfesioanles2">
+            <End Role="Profesionales" EntitySet="Profesionales" />
+            <End Role="Usuarios" EntitySet="Usuarios" />
+          </AssociationSet>
+          <FunctionImport Name="s_DetalleVentas">
+            <Parameter Name="cantidad" Mode="In" Type="Int32" />
+            <Parameter Name="descripcion" Mode="In" Type="String" />
+            <Parameter Name="precio" Mode="In" Type="Decimal" />
+            <Parameter Name="gravadas" Mode="In" Type="Decimal" />
+            <Parameter Name="totales" Mode="In" Type="Decimal" />
+            <Parameter Name="idVentas" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="s_Insertar_Ventas">
+            <Parameter Name="idVentas" Mode="InOut" Type="Int32" />
+            <Parameter Name="numeroVentas" Mode="In" Type="String" />
+            <Parameter Name="fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="estado" Mode="In" Type="String" />
+            <Parameter Name="idClientes" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="s_buscar_registro" ReturnType="Collection(dbSystem_MarketModel.s_buscar_registro_Result)">
+          <Parameter Name="texobuscar" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="s_Anular_Ventas">
+          <Parameter Name="idVentas" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="s_buscar_profesionales" ReturnType="Collection(dbSystem_MarketModel.s_buscar_profesionales_Result)">
+          <Parameter Name="textobuscar" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="s_Buscar_Ventas" ReturnType="Collection(dbSystem_MarketModel.s_Buscar_Ventas_Result)">
+            <Parameter Name="fechaInicial" Mode="In" Type="String" />
+            <Parameter Name="fechafinal" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="s_editar_Clientes">
+            <Parameter Name="idClientes" Mode="In" Type="Int32" />
+            <Parameter Name="ccoruc" Mode="In" Type="String" />
+            <Parameter Name="razonsocial" Mode="In" Type="String" />
+            <Parameter Name="direccion" Mode="In" Type="String" />
+            <Parameter Name="telefono" Mode="In" Type="String" />
+            <Parameter Name="correo" Mode="In" Type="String" />
+            <Parameter Name="idProfesionales" Mode="In" Type="Int32" />
+            <Parameter Name="idCiudades" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="s_editar_profesioanles">
+            <Parameter Name="idprofesional" Mode="In" Type="Int32" />
+            <Parameter Name="ccprofesional" Mode="In" Type="String" />
+            <Parameter Name="nombres" Mode="In" Type="String" />
+            <Parameter Name="apellidos" Mode="In" Type="String" />
+            <Parameter Name="direccion" Mode="In" Type="String" />
+            <Parameter Name="telefono" Mode="In" Type="String" />
+            <Parameter Name="correo" Mode="In" Type="String" />
+            <Parameter Name="idciudades" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="s_editar_Usuarios">
+            <Parameter Name="idUsuarios" Mode="In" Type="Int32" />
+            <Parameter Name="usuario" Mode="In" Type="String" />
+            <Parameter Name="contraseña" Mode="In" Type="String" />
+            <Parameter Name="acceso" Mode="In" Type="String" />
+            <Parameter Name="idProfesionales" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="s_eliminar_profesionales">
+          <Parameter Name="idprofesional" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="s_eliminar_Usuarios">
+          <Parameter Name="idUsuarios" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="s_elimnar_Clientes">
+          <Parameter Name="idClientes" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="s_Generar_Comprobantes" ReturnType="Collection(dbSystem_MarketModel.s_Generar_Comprobantes_Result)">
+          <Parameter Name="idVentas" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="s_Mostrar_Ventas" ReturnType="Collection(dbSystem_MarketModel.s_Mostrar_Ventas_Result)" />
+          <EntitySet Name="DetalleVenta" EntityType="dbSystem_MarketModel.DetalleVenta" />
+          <AssociationSet Name="fk_idventas" Association="dbSystem_MarketModel.fk_idventas">
+            <End Role="Ventas" EntitySet="Ventas" />
+            <End Role="DetalleVenta" EntitySet="DetalleVenta" />
+          </AssociationSet>
+        </EntityContainer>
+        <ComplexType Name="s_buscar_registro_Result">
+          <Property Type="Int32" Name="idClientes" Nullable="false" />
+          <Property Type="String" Name="ccoruc" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="razonsocial" Nullable="false" MaxLength="250" />
+          <Property Type="String" Name="direccion" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="telefono" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="correo" Nullable="true" MaxLength="40" />
+          <Property Type="Int32" Name="idProfesional" Nullable="true" />
+          <Property Type="Int32" Name="IdCiudades" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="s_buscar_profesionales_Result">
+          <Property Type="Int32" Name="idProfesional" Nullable="false" />
+          <Property Type="String" Name="ccProfesional" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="nombres" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="apellidos" Nullable="true" MaxLength="70" />
+          <Property Type="String" Name="direccion" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="telefono" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="correo" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="idciudades" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="s_Buscar_Ventas_Result">
+          <Property Type="Int32" Name="idVentas" Nullable="false" />
+          <Property Type="String" Name="numeroVentas" Nullable="true" MaxLength="15" />
+          <Property Type="DateTime" Name="fecha" Nullable="true" />
+          <Property Type="String" Name="estado" Nullable="true" MaxLength="15" />
+          <Property Type="Int32" Name="idClientes" Nullable="true" />
+          <Property Type="String" Name="ccoruc" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="razonsocial" Nullable="false" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="s_Generar_Comprobantes_Result">
+          <Property Type="Int32" Name="idVentas" Nullable="false" />
+          <Property Type="String" Name="numeroVentas" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="ccoruc" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="razonsocial" Nullable="false" MaxLength="250" />
+          <Property Type="String" Name="direccion" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="telefono" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="cantidad" Nullable="true" />
+          <Property Type="String" Name="descripcion" Nullable="true" MaxLength="260" />
+          <Property Type="Decimal" Name="precio" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="gravadas" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="totales" Nullable="true" Precision="18" Scale="0" />
+        </ComplexType>
+        <ComplexType Name="s_Mostrar_Ventas_Result">
+          <Property Type="Int32" Name="idVentas" Nullable="false" />
+          <Property Type="String" Name="numeroVentas" Nullable="true" MaxLength="15" />
+          <Property Type="DateTime" Name="fecha" Nullable="true" />
+          <Property Type="String" Name="estado" Nullable="true" MaxLength="15" />
+          <Property Type="Int32" Name="idClientes" Nullable="true" />
+          <Property Type="String" Name="ccoruc" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="razonsocial" Nullable="false" MaxLength="250" />
+        </ComplexType>
+        <EntityType Name="DetalleVenta">
+          <Key>
+            <PropertyRef Name="idDetalleventa" />
+          </Key>
+          <Property Name="cantidad" Type="Int32" />
+          <Property Name="descripcion" Type="String" MaxLength="260" FixedLength="false" Unicode="true" />
+          <Property Name="precio" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="gravadas" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="totales" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="idventas" Type="Int32" />
+          <Property Name="idDetalleventa" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Ventas" Relationship="dbSystem_MarketModel.fk_idventas" FromRole="DetalleVenta" ToRole="Ventas" />
+        </EntityType>
+        <Association Name="fk_idventas">
+          <End Type="dbSystem_MarketModel.Ventas" Role="Ventas" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="dbSystem_MarketModel.DetalleVenta" Role="DetalleVenta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ventas">
+              <PropertyRef Name="idVentas" />
+            </Principal>
+            <Dependent Role="DetalleVenta">
+              <PropertyRef Name="idventas" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="dbSystem_MarketModelStoreContainer" CdmEntityContainer="dbSystem_MarketEntities">
+          <EntitySetMapping Name="ciudades">
+            <EntityTypeMapping TypeName="dbSystem_MarketModel.ciudades">
+              <MappingFragment StoreEntitySet="ciudades">
+                <ScalarProperty Name="IdCiudades" ColumnName="IdCiudades" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Clientes">
+            <EntityTypeMapping TypeName="dbSystem_MarketModel.Clientes">
+              <MappingFragment StoreEntitySet="Clientes">
+                <ScalarProperty Name="idClientes" ColumnName="idClientes" />
+                <ScalarProperty Name="ccoruc" ColumnName="ccoruc" />
+                <ScalarProperty Name="razonsocial" ColumnName="razonsocial" />
+                <ScalarProperty Name="direccion" ColumnName="direccion" />
+                <ScalarProperty Name="telefono" ColumnName="telefono" />
+                <ScalarProperty Name="correo" ColumnName="correo" />
+                <ScalarProperty Name="idProfesional" ColumnName="idProfesional" />
+                <ScalarProperty Name="IdCiudades" ColumnName="IdCiudades" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Profesionales">
+            <EntityTypeMapping TypeName="dbSystem_MarketModel.Profesionales">
+              <MappingFragment StoreEntitySet="Profesionales">
+                <ScalarProperty Name="idProfesional" ColumnName="idProfesional" />
+                <ScalarProperty Name="ccProfesional" ColumnName="ccProfesional" />
+                <ScalarProperty Name="nombres" ColumnName="nombres" />
+                <ScalarProperty Name="apellidos" ColumnName="apellidos" />
+                <ScalarProperty Name="direccion" ColumnName="direccion" />
+                <ScalarProperty Name="telefono" ColumnName="telefono" />
+                <ScalarProperty Name="correo" ColumnName="correo" />
+                <ScalarProperty Name="idciudades" ColumnName="idciudades" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuarios">
+            <EntityTypeMapping TypeName="dbSystem_MarketModel.Usuarios">
+              <MappingFragment StoreEntitySet="Usuarios">
+                <ScalarProperty Name="idUsuarios" ColumnName="idUsuarios" />
+                <ScalarProperty Name="usuario" ColumnName="usuario" />
+                <ScalarProperty Name="contraseña" ColumnName="contraseña" />
+                <ScalarProperty Name="acceso" ColumnName="acceso" />
+                <ScalarProperty Name="idProfesionales" ColumnName="idProfesionales" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ventas">
+            <EntityTypeMapping TypeName="dbSystem_MarketModel.Ventas">
+              <MappingFragment StoreEntitySet="Ventas">
+                <ScalarProperty Name="idVentas" ColumnName="idVentas" />
+                <ScalarProperty Name="numeroVentas" ColumnName="numeroVentas" />
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="idClientes" ColumnName="idClientes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="s_DetalleVentas" FunctionName="dbSystem_MarketModel.Store.s_DetalleVentas" />
+          <FunctionImportMapping FunctionImportName="s_Insertar_Ventas" FunctionName="dbSystem_MarketModel.Store.s_Insertar_Ventas" />
+          <FunctionImportMapping FunctionImportName="s_buscar_registro" FunctionName="dbSystem_MarketModel.Store.s_buscar_registro">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="dbSystem_MarketModel.s_buscar_registro_Result">
+                <ScalarProperty Name="idClientes" ColumnName="idClientes" />
+                <ScalarProperty Name="ccoruc" ColumnName="ccoruc" />
+                <ScalarProperty Name="razonsocial" ColumnName="razonsocial" />
+                <ScalarProperty Name="direccion" ColumnName="direccion" />
+                <ScalarProperty Name="telefono" ColumnName="telefono" />
+                <ScalarProperty Name="correo" ColumnName="correo" />
+                <ScalarProperty Name="idProfesional" ColumnName="idProfesional" />
+                <ScalarProperty Name="IdCiudades" ColumnName="IdCiudades" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="s_Anular_Ventas" FunctionName="dbSystem_MarketModel.Store.s_Anular_Ventas" />
+          <FunctionImportMapping FunctionImportName="s_buscar_profesionales" FunctionName="dbSystem_MarketModel.Store.s_buscar_profesionales">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="dbSystem_MarketModel.s_buscar_profesionales_Result">
+                <ScalarProperty Name="idProfesional" ColumnName="idProfesional" />
+                <ScalarProperty Name="ccProfesional" ColumnName="ccProfesional" />
+                <ScalarProperty Name="nombres" ColumnName="nombres" />
+                <ScalarProperty Name="apellidos" ColumnName="apellidos" />
+                <ScalarProperty Name="direccion" ColumnName="direccion" />
+                <ScalarProperty Name="telefono" ColumnName="telefono" />
+                <ScalarProperty Name="correo" ColumnName="correo" />
+                <ScalarProperty Name="idciudades" ColumnName="idciudades" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="s_Buscar_Ventas" FunctionName="dbSystem_MarketModel.Store.s_Buscar_Ventas">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="dbSystem_MarketModel.s_Buscar_Ventas_Result">
+                <ScalarProperty Name="idVentas" ColumnName="idVentas" />
+                <ScalarProperty Name="numeroVentas" ColumnName="numeroVentas" />
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="idClientes" ColumnName="idClientes" />
+                <ScalarProperty Name="ccoruc" ColumnName="ccoruc" />
+                <ScalarProperty Name="razonsocial" ColumnName="razonsocial" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="s_editar_Clientes" FunctionName="dbSystem_MarketModel.Store.s_editar_Clientes" />
+          <FunctionImportMapping FunctionImportName="s_editar_profesioanles" FunctionName="dbSystem_MarketModel.Store.s_editar_profesioanles" />
+          <FunctionImportMapping FunctionImportName="s_editar_Usuarios" FunctionName="dbSystem_MarketModel.Store.s_editar_Usuarios" />
+          <FunctionImportMapping FunctionImportName="s_eliminar_profesionales" FunctionName="dbSystem_MarketModel.Store.s_eliminar_profesionales" />
+          <FunctionImportMapping FunctionImportName="s_eliminar_Usuarios" FunctionName="dbSystem_MarketModel.Store.s_eliminar_Usuarios" />
+          <FunctionImportMapping FunctionImportName="s_elimnar_Clientes" FunctionName="dbSystem_MarketModel.Store.s_elimnar_Clientes" />
+          <FunctionImportMapping FunctionImportName="s_Generar_Comprobantes" FunctionName="dbSystem_MarketModel.Store.s_Generar_Comprobantes">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="dbSystem_MarketModel.s_Generar_Comprobantes_Result">
+                <ScalarProperty Name="idVentas" ColumnName="idVentas" />
+                <ScalarProperty Name="numeroVentas" ColumnName="numeroVentas" />
+                <ScalarProperty Name="ccoruc" ColumnName="ccoruc" />
+                <ScalarProperty Name="razonsocial" ColumnName="razonsocial" />
+                <ScalarProperty Name="direccion" ColumnName="direccion" />
+                <ScalarProperty Name="telefono" ColumnName="telefono" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="precio" ColumnName="precio" />
+                <ScalarProperty Name="gravadas" ColumnName="gravadas" />
+                <ScalarProperty Name="totales" ColumnName="totales" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="s_Mostrar_Ventas" FunctionName="dbSystem_MarketModel.Store.s_Mostrar_Ventas">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="dbSystem_MarketModel.s_Mostrar_Ventas_Result">
+                <ScalarProperty Name="idVentas" ColumnName="idVentas" />
+                <ScalarProperty Name="numeroVentas" ColumnName="numeroVentas" />
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="idClientes" ColumnName="idClientes" />
+                <ScalarProperty Name="ccoruc" ColumnName="ccoruc" />
+                <ScalarProperty Name="razonsocial" ColumnName="razonsocial" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="DetalleVenta">
+            <EntityTypeMapping TypeName="dbSystem_MarketModel.DetalleVenta">
+              <MappingFragment StoreEntitySet="DetalleVenta">
+                <ScalarProperty Name="idDetalleventa" ColumnName="idDetalleventa" />
+                <ScalarProperty Name="idventas" ColumnName="idventas" />
+                <ScalarProperty Name="totales" ColumnName="totales" />
+                <ScalarProperty Name="gravadas" ColumnName="gravadas" />
+                <ScalarProperty Name="precio" ColumnName="precio" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
