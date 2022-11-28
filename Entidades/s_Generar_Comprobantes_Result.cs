@@ -15,6 +15,7 @@ namespace Entidades
     {
         public int idVentas { get; set; }
         public string numeroVentas { get; set; }
+        public DateTime fecha { get; set; }
         public string ccoruc { get; set; }
         public string razonsocial { get; set; }
         public string direccion { get; set; }

@@ -10,16 +10,14 @@
 namespace Entidades
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Usuarios
+    public partial class s_mostrar_Usuarios_Result
     {
         public int idUsuarios { get; set; }
         public string usuario { get; set; }
         public string contraseña { get; set; }
         public string acceso { get; set; }
         public Nullable<int> idProfesionales { get; set; }
-    
-        public virtual Profesionales Profesionales { get; set; }
+        public string profesional { get; set; }
     }
 }

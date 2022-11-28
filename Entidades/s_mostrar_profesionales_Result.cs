@@ -10,16 +10,16 @@
 namespace Entidades
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Usuarios
+    public partial class s_mostrar_profesionales_Result
     {
-        public int idUsuarios { get; set; }
-        public string usuario { get; set; }
-        public string contraseña { get; set; }
-        public string acceso { get; set; }
-        public Nullable<int> idProfesionales { get; set; }
-    
-        public virtual Profesionales Profesionales { get; set; }
+        public int idProfesional { get; set; }
+        public string ccProfesional { get; set; }
+        public string nombres { get; set; }
+        public string apellidos { get; set; }
+        public string direccion { get; set; }
+        public string telefono { get; set; }
+        public string correo { get; set; }
+        public Nullable<int> idciudades { get; set; }
     }
 }

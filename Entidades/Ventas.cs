@@ -17,7 +17,7 @@ namespace Entidades
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Ventas()
         {
-            this.DetalleVenta = new HashSet<DetalleVenta>();
+            this.DetalleVenta = new HashSet<E_DetalleVentas>();
         }
     
         public int idVentas { get; set; }
@@ -28,6 +28,6 @@ namespace Entidades
     
         public virtual Clientes Clientes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DetalleVenta> DetalleVenta { get; set; }
+        public virtual ICollection<E_DetalleVentas> DetalleVenta { get; set; }
     }
 }
