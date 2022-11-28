@@ -27,6 +27,7 @@ namespace Logica
             }
 
         }
+
         public bool Agregar(Clientes obj)
         {
             return accion.Agregar(obj);

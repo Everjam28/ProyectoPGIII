@@ -50,7 +50,10 @@
     <Compile Include="S_Clientes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="S_Ciudades.cs" />
+    <Compile Include="S_GenerarComprobantes.cs" />
+    <Compile Include="S_Login.cs" />
     <Compile Include="S_Profesionales.cs" />
+    <Compile Include="S_Usuarios.cs" />
     <Compile Include="S_Ventas.cs" />
   </ItemGroup>
   <ItemGroup>
