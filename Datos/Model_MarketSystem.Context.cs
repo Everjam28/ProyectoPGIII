@@ -32,37 +32,8 @@ namespace Entidades
         public virtual DbSet<Profesionales> Profesionales { get; set; }
         public virtual DbSet<Usuarios> Usuarios { get; set; }
         public virtual DbSet<Ventas> Ventas { get; set; }
-        public virtual DbSet<DetallesVentas> DetalleVenta { get; set; }
     
-        public virtual int s_DetalleVentas(Nullable<int> cantidad, string descripcion, Nullable<decimal> precio, Nullable<decimal> gravadas, Nullable<decimal> totales, Nullable<int> idVentas)
-        {
-            var cantidadParameter = cantidad.HasValue ?
-                new ObjectParameter("cantidad", cantidad) :
-                new ObjectParameter("cantidad", typeof(int));
-    
-            var descripcionParameter = descripcion != null ?
-                new ObjectParameter("descripcion", descripcion) :
-                new ObjectParameter("descripcion", typeof(string));
-    
-            var precioParameter = precio.HasValue ?
-                new ObjectParameter("precio", precio) :
-                new ObjectParameter("precio", typeof(decimal));
-    
-            var gravadasParameter = gravadas.HasValue ?
-                new ObjectParameter("gravadas", gravadas) :
-                new ObjectParameter("gravadas", typeof(decimal));
-    
-            var totalesParameter = totales.HasValue ?
-                new ObjectParameter("totales", totales) :
-                new ObjectParameter("totales", typeof(decimal));
-    
-            var idVentasParameter = idVentas.HasValue ?
-                new ObjectParameter("idVentas", idVentas) :
-                new ObjectParameter("idVentas", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("s_DetalleVentas", cantidadParameter, descripcionParameter, precioParameter, gravadasParameter, totalesParameter, idVentasParameter);
-        }
-    
+       
         public virtual int s_Insertar_Ventas(ObjectParameter idVentas, string numeroVentas, Nullable<System.DateTime> fecha, string estado, Nullable<int> idClientes)
         {
             var numeroVentasParameter = numeroVentas != null ?
@@ -262,6 +233,29 @@ namespace Entidades
         public virtual ObjectResult<s_Mostrar_Ventas_Result> s_Mostrar_Ventas()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<s_Mostrar_Ventas_Result>("s_Mostrar_Ventas");
+        }
+    
+        public virtual ObjectResult<spiniciarsesion_Result> spiniciarsesion(string usuario, string contraseña)
+        {
+            var usuarioParameter = usuario != null ?
+                new ObjectParameter("usuario", usuario) :
+                new ObjectParameter("usuario", typeof(string));
+    
+            var contraseñaParameter = contraseña != null ?
+                new ObjectParameter("contraseña", contraseña) :
+                new ObjectParameter("contraseña", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spiniciarsesion_Result>("spiniciarsesion", usuarioParameter, contraseñaParameter);
+        }
+    
+        public virtual ObjectResult<s_mostrar_Usuarios_Result> s_mostrar_Usuarios()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<s_mostrar_Usuarios_Result>("s_mostrar_Usuarios");
+        }
+    
+        public virtual ObjectResult<s_mostrar_profesionales_Result> s_mostrar_profesionales()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<s_mostrar_profesionales_Result>("s_mostrar_profesionales");
         }
     }
 }

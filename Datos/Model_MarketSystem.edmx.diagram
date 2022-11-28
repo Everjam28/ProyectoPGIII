@@ -15,9 +15,6 @@
         <AssociationConnector Association="dbSystem_MarketModel.fk_idcliente" ManuallyRouted="false" />
         <AssociationConnector Association="dbSystem_MarketModel.fk_idProfesional" ManuallyRouted="false" />
         <AssociationConnector Association="dbSystem_MarketModel.fk_idProfesioanles2" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="dbSystem_MarketModel.DetalleVenta" Width="1.5" PointX="9.75" PointY="3.75" />
-        <AssociationConnector Association="dbSystem_MarketModel.fk_idventas" />
-        <AssociationConnector Association="dbSystem_MarketModel.fk_idventas" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

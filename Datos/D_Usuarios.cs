@@ -7,19 +7,18 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using Entidades;
-
 namespace Datos
 {
-    public class D_Ciudades
+    public class D_Usuarios
     {
-        public bool Agregar(ciudades obj)
+        public bool Agregar(Usuarios obj)
         {
             bool proceso = false;
             try
             {
                 using (dbSystem_MarketEntities db = new dbSystem_MarketEntities())
                 {
-                    db.ciudades.Add(obj);
+                    db.Usuarios.Add(obj);
                     db.SaveChanges();
                     proceso = true;
                 }
@@ -31,7 +30,7 @@ namespace Datos
             return proceso;
         }
 
-        public bool Actualizar(ciudades obj)
+        public bool Actualizar(Usuarios obj)
         {
             bool proceso = false;
             try
@@ -49,16 +48,15 @@ namespace Datos
             }
             return proceso;
         }
-
-        public bool Eliminar(int idciudad)
+        public bool Eliminar(int idusuarios)
         {
             bool proceso = false;
             try
             {
                 using (dbSystem_MarketEntities db = new dbSystem_MarketEntities())
                 {
-                    var ciudad = (from a in db.ciudades where a.IdCiudades == idciudad select a).Single();
-                    db.ciudades.Remove(ciudad);
+                    var usuarios = (from a in db.Usuarios where a.idUsuarios == idusuarios select a).Single();
+                    db.Usuarios.Remove(usuarios);
                     db.SaveChanges();
                     proceso = true;
                 }
@@ -70,23 +68,7 @@ namespace Datos
             return proceso;
         }
 
-        public ciudades BuscarId(int idciudad)
-        {
-            ciudades obj = null;
-            try
-            {
-                using (dbSystem_MarketEntities db = new dbSystem_MarketEntities())
-                {
-                    var query = from a in db.ciudades where a.IdCiudades == idciudad select a;
-                    var ciudad = query.First();
-                    obj = (ciudades)ciudad;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            return obj;
-        }
+
+        
     }
 }

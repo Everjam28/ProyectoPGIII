@@ -7,104 +7,260 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using Entidades;
-
+//using System.Transactions;
 namespace Datos
 {
     public class D_Ventas
     {
-        D_Detallesventas d_detallesventas = new D_Detallesventas();
+        readonly D_DetalleVentas d_detalleVenta = new D_DetalleVentas();
+        SqlConnection conectar = new SqlConnection("Data Source=.\\SQLEXPRESS;initial Catalog=dbSystem_Market;Integrated Security=true");
+
+        //SqlConnection conectar = new SqlConnection(ConfigurationManager.ConnectionStrings["dbSystem_MarketEntities"].ConnectionString);
+        //string conexion = ConfigurationManager.ConnectionStrings["dbSystem_MarketEntities"].ConnectionString;
 
 
-        //public DataTable MostrarRegistro(SqlConnection connection)
+
+
+
+        public bool InsertarVentas(Ventas obj)
+        {
+            bool proceso = false;
+            try
+            {
+                using (dbSystem_MarketEntities db = new dbSystem_MarketEntities())
+                {
+
+                    db.Ventas.Add(obj);
+                    db.SaveChanges();
+                    
+                    proceso = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return proceso;
+        }
+
+
+        public DataTable MostrarRegistros()
+        {
+            DataTable DtResultado = new DataTable();
+            SqlCommand command = new SqlCommand("s_Mostrar_Ventas", conectar)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+
+            SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+            dataAdapter.Fill(DtResultado);
+            dataAdapter.Dispose();
+
+            return DtResultado;
+        }
+
+
+
+        //public string InsertarVentas(Ventas ventas, List<E_DetalleVentas> detalleVentas)
         //{
-        //    using (dbSystem_MarketEntities Db = new dbSystem_MarketEntities())
+        //    string respuesta;
+
+
+        //    try
         //    {
-        //        DataTable dtRespuesta = new DataTable();
-        //        SqlCommand command = new SqlCommand("S_Mostrar_ventas", connection)
+        //        conectar.Open();
+        //        SqlTransaction transaction = conectar.BeginTransaction();
+
+        //        SqlCommand command = new SqlCommand
         //        {
+        //            Connection = conectar,
+        //            Transaction = transaction,
+        //            CommandText = "s_insertar_ventas",
         //            CommandType = CommandType.StoredProcedure
+
         //        };
 
-        //        SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
-        //        dataAdapter.Fill(dtRespuesta);
-        //        dataAdapter.Dispose();
+        //        SqlParameter ParIdventas = new SqlParameter
+        //        {
+        //            ParameterName = "@idVentas",
+        //            SqlDbType = SqlDbType.Int,
+        //            Direction = ParameterDirection.Output
+        //        };
 
+        //        command.Parameters.Add(ParIdventas);
 
-        //        return dtRespuesta;
+        //        command.Parameters.AddWithValue("@numeroVentas", ventas.numeroVentas);
+        //        command.Parameters.AddWithValue("@fecha", ventas.fecha);
+        //        command.Parameters.AddWithValue("@estado", ventas.estado);
+        //        command.Parameters.AddWithValue("@idClientes", ventas.idClientes);
+
+        //        respuesta = command.ExecuteNonQuery() == 1 ? "OK" : "No se pudo insertar el registro";
+
+        //        if (respuesta.Equals("OK"))
+        //        {
+        //            ventas.idVentas = Convert.ToInt32(command.Parameters["@idVentas"].Value);
+        //            foreach (E_DetalleVentas det in detalleVentas)
+        //            {
+        //                det.idventas = ventas.idVentas;
+
+        //                respuesta = Convert.ToString(d_detalleVenta.AgregarDVentas(det, ref transaction));//ref conectar, );
+        //                if (!respuesta.Equals("OK"))
+        //                {
+        //                    break;
+        //                }
+        //            }
+        //        }
+        //        if (respuesta.Equals("OK"))
+        //        {
+        //            transaction.Commit();
+        //        }
+        //        else
+        //        {
+        //            transaction.Rollback();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        respuesta = ex.Message;
+        //    }
+        //    finally
+        //    {
+        //        if (conectar.State == ConnectionState.Open)
+        //        {
+        //            conectar.Close();
+        //        }
         //    }
 
 
+        //    return respuesta;
         //}
 
-       
 
 
-
-
-
-        public void Agregar(Ventas ventas, List<DetallesVentas> detalleventas)
+        public DataTable BuscarRegistro(string fechainicial, string fechafinal)
         {
+            DataTable dtR = new DataTable();
 
-
-            string resp;
-            using (var db = new dbSystem_MarketEntities())
+            using (dbSystem_MarketEntities db = new dbSystem_MarketEntities())
             {
-
-
-                SqlCommand command = new SqlCommand
+                SqlCommand command = new SqlCommand("s_Buscar_Ventas", conectar)
                 {
-
-                    CommandText = "s_Insertar_Ventas",
                     CommandType = CommandType.StoredProcedure
                 };
 
-                SqlParameter P_idVentas = new SqlParameter
-                {
-                    ParameterName = "@idVentas",
-                    SqlDbType = SqlDbType.Int,
-                    Direction = ParameterDirection.Output
-                };
-                command.Parameters.Add(P_idVentas);
+                command.Parameters.AddWithValue("@fechainicial", fechainicial);
+                command.Parameters.AddWithValue("@fechafinal", fechafinal);
 
-                command.Parameters.AddWithValue("@numeroVentas", ventas.numeroVentas);
-                command.Parameters.AddWithValue("@fecha", ventas.fecha);
-                command.Parameters.AddWithValue("@estado", ventas.estado);
-                command.Parameters.AddWithValue("@idclientes", ventas.idClientes);
-
-                resp = command.ExecuteNonQuery() == 1 ? "OK" : "No se pudo insertar el registro";
-
-                if (resp.Equals("OK"))
-                {
-                    ventas.idClientes = Convert.ToInt32(command.Parameters["idVentas"].Value);
-                    foreach (DetallesVentas det in detalleventas)
-                    {
-                        det.Idventas = ventas.idVentas;
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+                dataAdapter.Fill(dtR);
+                dataAdapter.Dispose();
+                return dtR;
 
 
-
-                    }
-
-
-                }
-            }
-        }
-
-        public Ventas BuscarRegistro(string fechainicial, string fechafinal)
-        {
-            DataTable dtResultado = new DataTable();
-            using (var db = new dbSystem_MarketEntities())
-            {
-                var buscarPro = db.Database.SqlQuery<Ventas>("s_Buscar_Ventas  @fechaInicial @fechafinal",
-                    new SqlParameter(fechainicial,fechafinal)).FirstOrDefault();
-                return buscarPro;
             }
 
 
 
+            //}
+
+            //public DataTable MostrarRegistro()
+            //{
+            //    DataTable dtR = new DataTable();
+
+            //    using (dbSystem_MarketEntities db = new dbSystem_MarketEntities())
+            //    {
+            //        SqlCommand command = new SqlCommand("s_Mostrar_Ventas",conectar)
+            //        {
+            //            CommandType = CommandType.StoredProcedure
+            //        };
+
+
+            //        SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+            //        dataAdapter.Fill(dtR);
+            //        dataAdapter.Dispose();
+            //        return dtR;
+
+
+            //    }
+
+
+
+            //}
+
+
+            //public DataTable BuscarRegistro(string fechainicial, string fechafinal)
+            //{
+            //    DataTable dtR = new DataTable();
+
+            //    using (dbSystem_MarketEntities db = new dbSystem_MarketEntities())
+            //    {
+            //        SqlCommand command = new SqlCommand("s_Buscar_Ventas", conectar)
+            //        {
+            //            CommandType = CommandType.StoredProcedure
+            //        };
+
+            //        command.Parameters.AddWithValue("@fechainicial", fechainicial);
+            //        command.Parameters.AddWithValue("@fechafinal", fechafinal);
+
+            //        SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+            //        dataAdapter.Fill(dtR);
+            //        dataAdapter.Dispose();
+            //        return dtR;
+
+
+            //    }
+
+
+
+            //}
+
+
+
+            //public void Anulaomprobante(Ventas idventas)
+            //{
+
+            //    using (dbSystem_MarketEntities db = new dbSystem_MarketEntities())
+            //    {
+            //        SqlCommand command = new SqlCommand("s_Anular_Ventas")
+            //        {
+            //            CommandType = CommandType.StoredProcedure
+            //        };
+
+            //       // conectar.Open();
+
+            //        command.Parameters.AddWithValue("@idVentas", idventas.idVentas);
+
+            //        command.ExecuteNonQuery();
+
+            //        //conectar.Close();
+
+            //    }
+
+
+
+            //}
+
+            //public void AnularComprobante(Ventas idventas)
+            //{
+
+                
+            //        SqlCommand command = new SqlCommand("s_Anular_Ventas", conectar)
+            //        {
+            //            CommandType = CommandType.StoredProcedure
+            //        };
+
+            //        conectar.Open();
+
+            //        command.Parameters.AddWithValue("@idVentas", idventas.idVentas);
+
+            //        command.ExecuteNonQuery();
+
+            //        conectar.Close();
+
+            //}
+
+
         }
-
-
-
     }
-
 }
+//metadata

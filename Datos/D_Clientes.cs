@@ -12,6 +12,10 @@ namespace Datos
 {
     public class D_Clientes
     {
+       
+
+       
+
         public bool Agregar(Clientes obj)
         {
             bool proceso = false;
